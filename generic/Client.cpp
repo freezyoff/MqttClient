@@ -269,8 +269,9 @@ namespace mqtt{
 				}
 			}
 			else{
-				readByte(&CTRL);
-				break;
+				Packet::sendDisconnect(this);
+				disconnect();
+				_state = ClientState::bad_protocol;
 			}
 		}
 		
