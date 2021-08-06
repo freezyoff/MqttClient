@@ -1,7 +1,7 @@
 #include "Client.h"
 
-#include "../jacc/Msg.cpp"
-#include "../jacc/Packet.cpp"
+#include "Msg.cpp"
+#include "Packet.cpp"
 
 namespace freezyoff{
 namespace mqtt{

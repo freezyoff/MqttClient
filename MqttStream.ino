@@ -1,7 +1,5 @@
 #include <Arduino.h>
-#include "arduino_esp8266/Mqtt.h"
-
-#include "UserTrust.CA.h"
+#include "tls/UserTrust.CA.h"
 #include "arduino_esp8266/Mqtt.cpp"
 
 #include <TZ.h>

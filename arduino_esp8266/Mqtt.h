@@ -4,7 +4,7 @@
 #include <WiFiClientSecure.h>
 #include <LittleFS.h>
 
-#include "../jacc/Client.cpp"
+#include "../generic/Client.cpp"
 
 namespace arduino_esp8266 {
 namespace mqtt{
