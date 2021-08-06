@@ -1,13 +1,13 @@
 #include "Packet.h"
 
-namespace freezyoff{
+namespace generic{
 namespace mqtt{
 
 	uint16_t Packet::packetId(){ srand(time(NULL)); return rand() % 65535 + 1; }
 	
-	//Encode Remaining Length
+	//Encode Remaining generic
 	uint8_t Packet::encodeRemainingLength(uint8_t* dest, uint32_t length){
-		//max allowed 'Remaining Length'
+		//max allowed 'Remaining generic'
 		if (length > MQTT_MAX_REMAINING_LENGTH) return 0;
 		uint8_t digit = 0;
 		uint8_t len = 0;
@@ -25,7 +25,7 @@ namespace mqtt{
 		return len <= MQTT_MAX_BYTES_REMAINING_LENGTH? len : 0;
 	}
 	
-	//decode 'Remaining Length' start from current cursor pointer of IOStream.
+	//decode 'Remaining generic' start from current cursor pointer of IOStream.
 	//@return remaining length value in uint32_t
 	uint32_t Packet::decodeRemainingLength(Client* _c){
 		uint8_t  multiplier = 1;
@@ -74,7 +74,7 @@ namespace mqtt{
 		varHeader[varHeaderLen++] = _p->keepAlive >> 8;
 		varHeader[varHeaderLen++] = _p->keepAlive & 0xFF;
 		
-		//Payload Length
+		//Payload generic
 		if (_p->clientId) payloadLen += 2 + strlen(_p->clientId); 
 		else 		 	  return ClientState::bad_identifier;
 		
@@ -127,14 +127,14 @@ namespace mqtt{
 		if (!_c->readByte(&cbyte)) 		return ClientState::socket_error;
 		else if (cbyte != MQTT_CONNACK) return ClientState::bad_protocol;
 		
-		//2nd byte -> Fixed Header Remaining Length == 2
-		uint32_t remainingLength = decodeRemainingLength(_c);
-		if (remainingLength != 2){ //malformed remaining length
+		//2nd byte -> Fixed Header Remaining generic == 2
+		uint32_t remaininggeneric = decodeRemainingLength(_c);
+		if (remaininggeneric != 2){ //malformed remaining length
 			return ClientState::bad_protocol;
 		}
 		
-		uint8_t rbyte[remainingLength];
-		if (!_c->readBytes(rbyte, remainingLength)){
+		uint8_t rbyte[remaininggeneric];
+		if (!_c->readBytes(rbyte, remaininggeneric)){
 			return ClientState::socket_error;
 		}
 		
@@ -224,18 +224,18 @@ namespace mqtt{
 		
 		
 		//read Fixed Header remaining length
-		uint32_t remainingLength = decodeRemainingLength(_c);
-		if (remainingLength == 0) return ClientState::bad_protocol;
+		uint32_t remaininggeneric = decodeRemainingLength(_c);
+		if (remaininggeneric == 0) return ClientState::bad_protocol;
 		
 		//extract Variable Header -> Packet Id
 		//we need 2 bytes for Packet Id & match pid given
 		uint8_t pidbytes[2] = {0};
 		if (!_c->readBytes(pidbytes, 2)) return ClientState::connection_lost;
 		*pid = pidbytes[0] << 8 | pidbytes[1];
-		remainingLength -= 2;
+		remaininggeneric -= 2;
 		
 		//extract Payload
-		for(uint32_t i=0; i<remainingLength; i++) {
+		for(uint32_t i=0; i<remaininggeneric; i++) {
 			uint8_t bb = 0;
 			if (!_c->readByte(&bb)) return ClientState::connection_lost;
 			qos->push_back(bb);
@@ -285,8 +285,8 @@ namespace mqtt{
 		else if (cByte != MQTT_UNSUBACK) return ClientState::bad_protocol;
 		
 		//read Fixed Header remaining length
-		uint32_t remainingLength = decodeRemainingLength(_c);
-		if (remainingLength == 0) return ClientState::bad_protocol;
+		uint32_t remaininggeneric = decodeRemainingLength(_c);
+		if (remaininggeneric == 0) return ClientState::bad_protocol;
 		
 		//we need 2 bytes for Packet Id & match pid given
 		uint8_t pidbytes[2] = {0};
@@ -294,7 +294,7 @@ namespace mqtt{
 		*pid = pidbytes[0] << 8 | pidbytes[1];
 		
 		
-		return remainingLength-2 == 0? ClientState::connected : ClientState::bad_protocol;
+		return remaininggeneric-2 == 0? ClientState::connected : ClientState::bad_protocol;
 	}
 	
 	ClientState Packet::sendPublish(Client* _c, 
@@ -380,14 +380,14 @@ namespace mqtt{
 		uint8_t qos    	  = (cByte & 0b110 ) >> 1;
 		bool 	retain    = (cByte & 0b1   );
 		
-		uint32_t packetLength = decodeRemainingLength(_c);
+		uint32_t packetgeneric = decodeRemainingLength(_c);
 		
 		//topic length
 		uint8_t tl[2] = {0,0};
 		if (!_c->readBytes(tl, 2)) return ClientState::connection_lost;
 		uint16_t topicLen = (tl[0] << 8 | tl[1]);
-		packetLength -= ((uint32_t)topicLen);
-		packetLength -= 2;
+		packetgeneric -= ((uint32_t)topicLen);
+		packetgeneric -= 2;
 		
 		//read topic 
 		uint8_t topicBytes[topicLen + 1];
@@ -399,17 +399,17 @@ namespace mqtt{
 		if (qos > 0){
 			_c->readBytes(tl, 2);
 			*pid = (tl[0] << 8 | tl[1]);
-			packetLength -= 2;
+			packetgeneric -= 2;
 		}
 		
 		//payload
 		msg->seek(0);
-		Serial.print(F("packetLength: "));Serial.println(packetLength);
-		while (packetLength > 0){
-			size_t r = (packetLength > 1000)? packetLength - 1000 : packetLength;
+		Serial.print(F("packetgeneric: "));Serial.println(packetgeneric);
+		while (packetgeneric > 0){
+			size_t r = (packetgeneric > 1000)? packetgeneric - 1000 : packetgeneric;
 			if (!_c->readBytes(msg, r)) return ClientState::connection_lost;	
 			msg->flush();
-			packetLength -= r;
+			packetgeneric -= r;
 		}
 		return ClientState::connected;
 	}

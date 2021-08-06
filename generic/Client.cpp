@@ -1,9 +1,6 @@
 #include "Client.h"
 
-#include "Msg.cpp"
-#include "Packet.cpp"
-
-namespace freezyoff{
+namespace generic{
 namespace mqtt{
 	
 	void  	 Client::setSetSocketTimeout(uint16_t t){ _ioStream->setSetSocketTimeout(t); }

@@ -1,6 +1,6 @@
 #include "Msg.h"
 
-namespace freezyoff{
+namespace generic{
 namespace mqtt{
 	
 	StrBufferMsgImpl& StrBufferMsgImpl::operator=(const char* str){
@@ -81,5 +81,6 @@ namespace mqtt{
 	size_t Msg::position(){ return _ctx->position(); }
 	
 	ssize_t Msg::streamRemaining() { return _ctx->streamRemaining(); }
+	
 };
 };

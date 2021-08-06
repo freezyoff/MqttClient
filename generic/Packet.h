@@ -14,10 +14,8 @@
 #define MQTT_KEEP_ALIVE 15
 #endif
 
-namespace freezyoff{
+namespace generic{
 namespace mqtt{
-	
-	struct Client;
 	
 	namespace packet{
 	
@@ -43,6 +41,20 @@ namespace mqtt{
 		};
 		
 	};
+	
+	typedef enum{
+		socket_error=		-5,
+		connection_timeout=	-4,
+		connection_lost=	-3,
+		connection_failed=	-2,
+		disconnected=		-1,
+		connected=			 0,
+		bad_protocol=		 1,		//bad MQTT protocol
+		bad_identifier=		 2,		//bad client id
+		bad_credential=		 3,		//bad username & password
+		server_unavailable=	 4,		//server unavailable
+		unauthorized=		 5		//client not authorized
+	} ClientState;
 	
 	struct Packet{
 		

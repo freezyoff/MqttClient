@@ -1,6 +1,11 @@
 #include <Arduino.h>
 #include "tls/UserTrust.CA.h"
-#include "arduino_esp8266/Mqtt.cpp"
+#include "generic/generic.h"
+#include "arduino_esp8266/arduino_esp8266.h"
+
+typedef arduino_esp8266::mqtt::MqttSecureClient MqttSecureClient;
+typedef generic::mqtt::ClientListener MqttListener;
+typedef generic::mqtt::Msg MqttMsg;
 
 #include <TZ.h>
 #include <ESP8266WiFi.h>

@@ -6,7 +6,7 @@
 #define MSG_STR_BUFFER 1
 #define MSG_FILE_STREAM 2
 
-namespace freezyoff{
+namespace generic{
 namespace mqtt{
 	
 	struct MsgImpl : Stream{

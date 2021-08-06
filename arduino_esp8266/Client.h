@@ -4,16 +4,14 @@
 #include <WiFiClientSecure.h>
 #include <LittleFS.h>
 
-#include "../generic/Client.cpp"
-
 namespace arduino_esp8266 {
 namespace mqtt{
 	
-	typedef freezyoff::mqtt::Msg 	  	  MqttMsg;
-	typedef freezyoff::mqtt::ClientStream BaseClientStream;
-	typedef freezyoff::mqtt::Client  	  BaseClient;
+	typedef generic::mqtt::Msg 	  	  	MqttMsg;
+	typedef generic::mqtt::ClientStream BaseClientStream;
+	typedef generic::mqtt::Client  	  	BaseClient;
 	
-	struct FileStreamMsg : freezyoff::mqtt::FileStreamMsgImpl {
+	struct FileStreamMsg : generic::mqtt::FileStreamMsgImpl {
 		FileStreamMsg(const char* fname);
 		
 		~FileStreamMsg();
@@ -97,7 +95,7 @@ namespace mqtt{
 #endif
 
 	
-	struct MqttSecureClient : BaseClient, freezyoff::mqtt::ClientListener {
+	struct MqttSecureClient : BaseClient, generic::mqtt::ClientListener {
 		MqttSecureClient();
 		
 		~MqttSecureClient();
@@ -126,9 +124,5 @@ namespace mqtt{
 	
 };
 };
-
-typedef arduino_esp8266::mqtt::MqttSecureClient MqttSecureClient;
-typedef freezyoff::mqtt::ClientListener MqttListener;
-typedef freezyoff::mqtt::Msg MqttMsg;
 
 #endif
